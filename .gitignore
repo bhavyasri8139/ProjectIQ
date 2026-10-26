@@ -1,0 +1,17 @@
+
+.env
+.env.*
+!.env.example
+
+**/.venv/
+**/venv/
+**/node_modules/
+**/__pycache__/
+*.pyc
+
+backend/uploads/
+backend/chroma_db/
+backend/documents.json
+
+frontend/dist/
+.vercel/
