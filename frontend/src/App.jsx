@@ -45,6 +45,24 @@ export default function App() {
   ]);
   const [asking, setAsking] = useState(false);
   const [health, setHealth] = useState(null);
+  const [scopeLoading, setScopeLoading] = useState(false);
+  const [scopeError, setScopeError] = useState("");
+  const [scopeResult, setScopeResult] = useState(null);
+  const [scopeDocument, setScopeDocument] = useState("");
+
+  const [riskLoading, setRiskLoading] = useState(false);
+  const [riskError, setRiskError] = useState("");
+  const [riskResult, setRiskResult] = useState(null);
+
+  const [blockerLoading, setBlockerLoading] = useState(false);
+  const [blockerError, setBlockerError] = useState("");
+  const [blockerResult, setBlockerResult] = useState(null);
+
+  const [documentationLoading, setDocumentationLoading] = useState(false);
+  const [documentationError, setDocumentationError] = useState("");
+  const [documentationType, setDocumentationType] = useState("user_stories");
+  const [documentationResult, setDocumentationResult] = useState(null);
+
   const fileInput = useRef(null);
   const chatEnd = useRef(null);
 
@@ -182,6 +200,152 @@ export default function App() {
     }
   }
 
+  // Run the Scope & Deliverable Extraction Agent.
+  // The backend currently implements this agent only.
+  async function runScopeAgent() {
+    if (scopeLoading) return;
+    if (documents.length === 0) {
+      setScopeError("Upload and index at least one project document first.");
+      return;
+    }
+
+    setScopeLoading(true);
+    setScopeError("");
+    setScopeResult(null);
+
+    try {
+      const response = await fetch(`${API}/api/agents/scope`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          document_id: scopeDocument || null,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(
+          data.detail || data.message || `Scope analysis failed (${response.status}).`
+        );
+      }
+      setScopeResult(data);
+    } catch (err) {
+      setScopeError(
+        `${err.message} Check that the FastAPI server is running and that POST /api/agents/scope is available.`
+      );
+    } finally {
+      setScopeLoading(false);
+    }
+  }
+
+  // Agent 02: Risk Detection & Delivery Forecasting.
+  async function runRiskAgent() {
+    if (riskLoading) return;
+    if (!documents.length) {
+      setRiskError("Upload and index at least one project document first.");
+      return;
+    }
+
+    setRiskLoading(true);
+    setRiskError("");
+    setRiskResult(null);
+
+    try {
+      const response = await fetch(`${API}/api/agents/risk`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ document_id: scopeDocument || null }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.detail || `Risk analysis failed (${response.status}).`);
+      }
+      setRiskResult(data);
+    } catch (err) {
+      setRiskError(err.message || "Risk analysis failed.");
+    } finally {
+      setRiskLoading(false);
+    }
+  }
+
+  // Agent 03: Blocker & Action Item Identification.
+  async function runBlockerAgent() {
+    if (blockerLoading) return;
+    if (!documents.length) {
+      setBlockerError("Upload and index at least one project document first.");
+      return;
+    }
+
+    setBlockerLoading(true);
+    setBlockerError("");
+    setBlockerResult(null);
+
+    try {
+      const response = await fetch(`${API}/api/agents/blockers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ document_id: scopeDocument || null }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.detail || `Blocker analysis failed (${response.status}).`);
+      }
+      setBlockerResult(data);
+    } catch (err) {
+      setBlockerError(err.message || "Blocker analysis failed.");
+    } finally {
+      setBlockerLoading(false);
+    }
+  }
+
+  // Agent 04: Documentation Generation.
+  async function generateDocumentation() {
+    if (documentationLoading) return;
+    if (!documents.length) {
+      setDocumentationError("Upload and index at least one project document first.");
+      return;
+    }
+
+    setDocumentationLoading(true);
+    setDocumentationError("");
+    setDocumentationResult(null);
+
+    try {
+      const response = await fetch(`${API}/api/agents/documentation`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          document_id: scopeDocument || null,
+          document_type: documentationType,
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.detail || `Documentation generation failed (${response.status}).`);
+      }
+      setDocumentationResult(data);
+    } catch (err) {
+      setDocumentationError(err.message || "Documentation generation failed.");
+    } finally {
+      setDocumentationLoading(false);
+    }
+  }
+
+  function downloadGeneratedDocument() {
+    if (!documentationResult?.content) return;
+    const blob = new Blob([documentationResult.content], {
+      type: "text/markdown;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = documentationResult.filename || "projectiq-generated-document.md";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
   async function askQuestion(event) {
     event?.preventDefault();
     const text = question.trim();
@@ -254,6 +418,7 @@ export default function App() {
             { name: "Documents", icon: Files },
             { name: "Knowledge Base", icon: Database },
             { name: "AI Assistant", icon: MessageSquare },
+            { name: "AI Agents", icon: Bot },
           ].map(({ name, icon: Icon }) => (
             <button
               key={name}
@@ -523,6 +688,159 @@ export default function App() {
             </>
           )}
 
+          {page === "AI Agents" && (
+            <>
+              <section className="welcome-row">
+                <div>
+                  <div className="eyebrow"><Bot size={14} /> MULTI-AGENT PROJECT ANALYSIS</div>
+                  <h1>AI Agents</h1>
+                  <p className="page-subtitle">
+                    Run specialized agents against your indexed project documents.
+                  </p>
+                </div>
+                <button
+                  className="secondary-button"
+                  onClick={() => { loadDocuments(); loadHealth(); }}
+                >
+                  <RefreshCw size={16} /> Refresh data
+                </button>
+              </section>
+
+              <section className="stats-grid">
+                <StatCard icon={Bot} label="Available agents" value="4" note="Scope, risk, blockers & docs" tone="green" />
+                <StatCard icon={Files} label="Source documents" value={documents.length} note="Uploaded project files" tone="blue" />
+                <StatCard icon={Database} label="Indexed chunks" value={totalChunks} note="Available for analysis" tone="violet" />
+                <StatCard icon={Activity} label="Agent service" value={health?.api_reachable ? "Online" : "Offline"} note="FastAPI backend" tone="amber" />
+              </section>
+
+              <div className="panel" style={{ padding: 24, marginBottom: 20 }}>
+                <div className="panel-heading">
+                  <div>
+                    <span className="mini-label">ANALYSIS SCOPE</span>
+                    <h2>Choose source documents</h2>
+                    <p>All agents use the same selection. Choose all documents or one specific file.</p>
+                  </div>
+                  <div className="heading-icon"><Files size={22} /></div>
+                </div>
+                <label style={{ display: "grid", gap: 8, marginTop: 18, fontWeight: 600, fontSize: 13 }}>
+                  Source document
+                  <select
+                    value={scopeDocument}
+                    onChange={(e) => setScopeDocument(e.target.value)}
+                    style={{ width: "100%", padding: "12px 14px", border: "1px solid #dedee8", borderRadius: 10, background: "#fff", color: "#29283a" }}
+                  >
+                    <option value="">All uploaded documents</option>
+                    {documents.map((doc) => (
+                      <option key={doc.id} value={doc.id}>{doc.filename}</option>
+                    ))}
+                  </select>
+                </label>
+                {!documents.length && (
+                  <p style={{ color: "#a15c19", marginTop: 12, fontSize: 13 }}>
+                    Upload and index project documents before running an agent.
+                  </p>
+                )}
+              </div>
+
+              <div className="panel" style={{ padding: 24, marginBottom: 20 }}>
+                <div className="panel-heading">
+                  <div>
+                    <span className="mini-label">AGENT 01 · AVAILABLE</span>
+                    <h2>Scope & Deliverable Extraction Agent</h2>
+                    <p>Identifies project goals, scope, deliverables, milestones, timelines, and responsibilities.</p>
+                  </div>
+                  <div className="heading-icon"><Bot size={22} /></div>
+                </div>
+                <button className="primary-button" style={{ marginTop: 18 }} onClick={runScopeAgent} disabled={scopeLoading || !documents.length}>
+                  {scopeLoading ? <LoaderCircle className="spin" size={18} /> : <Sparkles size={18} />}
+                  {scopeLoading ? "Analyzing project..." : "Run Scope Agent"}
+                </button>
+                {scopeError && <div className="error-banner" style={{ marginTop: 14 }}><AlertCircle size={18} /><span>{scopeError}</span><button onClick={() => setScopeError("")}><X size={16} /></button></div>}
+                {scopeResult && <AgentOutput title="Scope analysis" data={scopeResult} />}
+              </div>
+
+              <div className="panel" style={{ padding: 24, marginBottom: 20 }}>
+                <div className="panel-heading">
+                  <div>
+                    <span className="mini-label">AGENT 02 · AVAILABLE</span>
+                    <h2>Risk Detection & Delivery Forecasting Agent</h2>
+                    <p>Identifies project risks, schedule concerns, dependency gaps, delivery challenges, and mitigation actions.</p>
+                  </div>
+                  <div className="heading-icon"><ShieldCheck size={22} /></div>
+                </div>
+                <button className="primary-button" style={{ marginTop: 18 }} onClick={runRiskAgent} disabled={riskLoading || !documents.length}>
+                  {riskLoading ? <LoaderCircle className="spin" size={18} /> : <Sparkles size={18} />}
+                  {riskLoading ? "Detecting risks..." : "Run Risk Agent"}
+                </button>
+                {riskError && <div className="error-banner" style={{ marginTop: 14 }}><AlertCircle size={18} /><span>{riskError}</span><button onClick={() => setRiskError("")}><X size={16} /></button></div>}
+                {riskResult && <AgentOutput title="Risk analysis & delivery forecast" data={riskResult} />}
+              </div>
+
+              <div className="panel" style={{ padding: 24, marginBottom: 20 }}>
+                <div className="panel-heading">
+                  <div>
+                    <span className="mini-label">AGENT 03 · AVAILABLE</span>
+                    <h2>Blocker & Action Item Identification Agent</h2>
+                    <p>Extracts unresolved blockers, pending decisions, action items, owners, priorities, and due dates when stated in the documents.</p>
+                  </div>
+                  <div className="heading-icon"><Activity size={22} /></div>
+                </div>
+                <button className="primary-button" style={{ marginTop: 18 }} onClick={runBlockerAgent} disabled={blockerLoading || !documents.length}>
+                  {blockerLoading ? <LoaderCircle className="spin" size={18} /> : <Sparkles size={18} />}
+                  {blockerLoading ? "Finding blockers..." : "Run Blocker Agent"}
+                </button>
+                {blockerError && <div className="error-banner" style={{ marginTop: 14 }}><AlertCircle size={18} /><span>{blockerError}</span><button onClick={() => setBlockerError("")}><X size={16} /></button></div>}
+                {blockerResult && <AgentOutput title="Blockers & action items" data={blockerResult} />}
+              </div>
+
+              <div className="panel" style={{ padding: 24, marginBottom: 20 }}>
+                <div className="panel-heading">
+                  <div>
+                    <span className="mini-label">AGENT 04 · AVAILABLE</span>
+                    <h2>Documentation Generation Agent</h2>
+                    <p>Creates structured project documents grounded in uploaded evidence. Generated recommendations are labelled separately from extracted facts.</p>
+                  </div>
+                  <div className="heading-icon"><FileText size={22} /></div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(220px, 1fr) auto", gap: 12, alignItems: "end", marginTop: 18 }}>
+                  <label style={{ display: "grid", gap: 8, fontWeight: 600, fontSize: 13 }}>
+                    Document to generate
+                    <select
+                      value={documentationType}
+                      onChange={(e) => setDocumentationType(e.target.value)}
+                      style={{ width: "100%", padding: "12px 14px", border: "1px solid #dedee8", borderRadius: 10, background: "#fff", color: "#29283a" }}
+                    >
+                      <option value="user_stories">User stories</option>
+                      <option value="risk_register">Risk register</option>
+                      <option value="action_items">Action-item report</option>
+                      <option value="project_summary">Project summary</option>
+                    </select>
+                  </label>
+                  <button className="primary-button" onClick={generateDocumentation} disabled={documentationLoading || !documents.length}>
+                    {documentationLoading ? <LoaderCircle className="spin" size={18} /> : <Sparkles size={18} />}
+                    {documentationLoading ? "Generating..." : "Generate document"}
+                  </button>
+                </div>
+                {documentationError && <div className="error-banner" style={{ marginTop: 14 }}><AlertCircle size={18} /><span>{documentationError}</span><button onClick={() => setDocumentationError("")}><X size={16} /></button></div>}
+                {documentationResult && (
+                  <div style={{ marginTop: 20 }}>
+                    <div className="panel-heading">
+                      <div>
+                        <span className="mini-label">GENERATED DOCUMENT</span>
+                        <h3 style={{ margin: "6px 0" }}>{documentationResult.title || "Project document"}</h3>
+                        <p>{(documentationResult.sources || []).length} source reference(s)</p>
+                      </div>
+                      <button className="secondary-button" onClick={downloadGeneratedDocument}><FileText size={16} /> Download .md</button>
+                    </div>
+                    <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", background: "#f7f7fb", border: "1px solid #e8e7ef", borderRadius: 12, padding: 18, marginTop: 16, fontSize: 13, lineHeight: 1.65, color: "#29283a", maxHeight: 620, overflow: "auto" }}>
+                      {documentationResult.content}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
           {page === "Knowledge Base" && (
             <>
               <section className="welcome-row">
@@ -627,6 +945,24 @@ export default function App() {
           )}
         </div>
       </main>
+    </div>
+  );
+}
+
+function AgentOutput({ title, data }) {
+  return (
+    <div style={{ marginTop: 20, borderTop: "1px solid #e8e7ef", paddingTop: 18 }}>
+      <div className="panel-heading">
+        <div>
+          <span className="mini-label">COMPLETED OUTPUT</span>
+          <h3 style={{ margin: "6px 0" }}>{title}</h3>
+          <p>{data.documents_analyzed ?? "—"} source document(s) analyzed</p>
+        </div>
+        <span className="status-pill success"><span /> Completed</span>
+      </div>
+      <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", background: "#f7f7fb", border: "1px solid #e8e7ef", borderRadius: 12, padding: 18, marginTop: 16, fontSize: 13, lineHeight: 1.65, color: "#29283a", maxHeight: 620, overflow: "auto" }}>
+        {JSON.stringify(data, null, 2)}
+      </pre>
     </div>
   );
 }

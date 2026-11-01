@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "6600774c-c432-4f98-b952-1d1feee4c59a",
+    "filename": "milestone 2 risk management.docx",
+    "file_type": "DOCX",
+    "file_size": 18071,
+    "chunks": 7,
+    "summary": "**Summary:**\n\nThe document outlines the objectives and requirements of an AI Project Intelligence & Risk Advisor project. The project aims to develop an intelligent platform that helps software development teams and student project groups manage their projects more effectively by extracting actionable intelligence from scattered project documents.\n\n**Purpose:**\n\nThe purpose of this project is to develop an AI-powered platform that provides automated insights, risk forecasts, and actionable recommendations to teams, transforming scattered project artifacts into a living, queryable intelligence layer.\n\n**Key Points:**\n\n* The platform will accept various project artifacts, including PDFs, DOCX, CSV, and plain text files, and build a unified project knowledge base using RAG (Resource Allocation Graph).\n* The platform will automatically extract project scope, identify risks, forecast delivery challenges, and score project health using a multi-agent pipeline.\n* The platform will generate missing project documentation, including user stories, risk registers, and action items, from uploaded content.\n* The platform will provide a conversational project assistant that answers",
+    "status": "processed"
+  }
+]
