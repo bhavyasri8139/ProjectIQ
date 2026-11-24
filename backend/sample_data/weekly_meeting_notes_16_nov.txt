@@ -1,0 +1,30 @@
+TEAM ORION WEEKLY MEETING NOTES
+Date: 16 November 2026
+Attendees: Ananya Rao, Karthik Menon, Sneha Iyer, Rohit Verma
+Faculty mentor: Dr. Meera Nair (joined for the last 15 minutes)
+
+1. STATUS DISCUSSION
+Ananya reported that the authentication API is only partly finished. Login with email and password works, but the college SSO integration has not started because the SSO credentials have still not been issued by the college IT department. The request was first sent on 28 October.
+Karthik said the registrations API is about 70 percent complete and email confirmation is working in the test environment.
+Sneha has completed the student event listing page but cannot build the admin dashboard screens until the final designs are delivered.
+Rohit said the admin dashboard designs are delayed because he was occupied with his end-semester exam preparation. He expects to deliver them by 20 November.
+
+2. BLOCKERS
+- Blocker: SSO credentials from college IT are still pending, which blocks the SSO login deliverable (D4). Owner of the follow-up: Ananya.
+- Blocker: Admin dashboard designs are not ready, which blocks frontend work on D3. Owner: Rohit.
+- The college cloud server has not been provisioned, so the team cannot test deployment yet. No owner has been assigned.
+
+3. PENDING DECISIONS
+- Which payment gateway to use for paid events (Razorpay or PayU). Decision is pending the faculty mentor's input on fees.
+- Whether attendance should be recorded by QR code scan or by manual list. Not decided.
+
+4. ACTION ITEMS
+- Ananya to escalate the SSO credential request to the IT head by 18 November.
+- Rohit to deliver admin dashboard designs by 20 November.
+- Karthik to finish the registrations API and write unit tests by 22 November.
+- Sneha to start the registration form screens by 19 November.
+- Dr. Meera Nair to confirm the payment gateway choice by 23 November.
+- Someone needs to request cloud server access from the college. Owner not assigned.
+
+5. RISKS RAISED
+Karthik raised a concern that the project has no buffer left if SSO credentials arrive after 25 November. Ananya noted that test coverage is currently very low because no automated tests have been written for the authentication module.

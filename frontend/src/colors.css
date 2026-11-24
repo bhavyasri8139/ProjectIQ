@@ -1,0 +1,83 @@
+/* ProjectIQ colour accents: every area of the project gets its own colour,
+   and the same colour always means the same thing (red = risk, amber = blockers,
+   green = healthy / done, blue = scope and documents, teal = actions, violet = forecast). */
+
+:root {
+  --green: #2e9e6b;
+  --amber: #d99a1c;
+  --orange: #e0792b;
+  --red: #cf3d4b;
+  --teal: #1f8a8a;
+  --violet: #6a5bb5;
+  --pink: #c8507c;
+}
+
+/* ---- sidebar: one icon colour per page ---- */
+.navigation .nav-item:nth-child(1) svg { color: #7fb6ea; }
+.navigation .nav-item:nth-child(2) svg { color: #f2c25c; }
+.navigation .nav-item:nth-child(3) svg { color: #55c7c7; }
+.navigation .nav-item:nth-child(4) svg { color: #a99cf0; }
+.navigation .nav-item:nth-child(5) svg { color: #52cf97; }
+.navigation .nav-item:nth-child(6) svg { color: #f59d63; }
+.navigation .nav-item:nth-child(7) svg { color: #ee86ab; }
+.navigation .nav-item.active svg { color: #fff; }
+.nav-count { padding: 1px 8px; border-radius: 10px; background: #e0a03a; color: #16202b; font-weight: 700; }
+
+/* ---- stat cards: coloured icon tile and top edge ---- */
+.stat-icon.blue   { background: #e8f1fa; color: #1f5a99; }
+.stat-icon.green  { background: #e3f4eb; color: #2e9e6b; }
+.stat-icon.amber  { background: #fdf2d6; color: #b8800f; }
+.stat-icon.orange { background: #fdeadc; color: #d4691f; }
+.stat-icon.red    { background: #fbe6e8; color: #cf3d4b; }
+.stat-icon.teal   { background: #def2f2; color: #1f8a8a; }
+.stat-icon.violet { background: #eeebf9; color: #6a5bb5; }
+.stat-card { border-top: 3px solid #d5dbe1; }
+.stat-card:has(.stat-icon.blue)   { border-top-color: #1f5a99; }
+.stat-card:has(.stat-icon.green)  { border-top-color: #2e9e6b; }
+.stat-card:has(.stat-icon.amber)  { border-top-color: #d99a1c; }
+.stat-card:has(.stat-icon.orange) { border-top-color: #e0792b; }
+.stat-card:has(.stat-icon.red)    { border-top-color: #cf3d4b; }
+.stat-card:has(.stat-icon.teal)   { border-top-color: #1f8a8a; }
+.stat-card:has(.stat-icon.violet) { border-top-color: #6a5bb5; }
+
+/* ---- Project Insights cards: health, scope, risks, forecast, blockers, actions ---- */
+.dash-grid > .card { border-top: 3px solid #d5dbe1; }
+.dash-grid > .card:nth-child(1) { border-top-color: var(--green); }
+.dash-grid > .card:nth-child(2) { border-top-color: var(--blue); }
+.dash-grid > .card:nth-child(3) { border-top-color: var(--red); }
+.dash-grid > .card:nth-child(4) { border-top-color: var(--violet); }
+.dash-grid > .card:nth-child(5) { border-top-color: var(--amber); }
+.dash-grid > .card:nth-child(6) { border-top-color: var(--teal); }
+.dash-grid > .card:nth-child(1) .mini-label { color: var(--green); }
+.dash-grid > .card:nth-child(2) .mini-label { color: var(--blue); }
+.dash-grid > .card:nth-child(3) .mini-label { color: var(--red); }
+.dash-grid > .card:nth-child(4) .mini-label { color: var(--violet); }
+.dash-grid > .card:nth-child(5) .mini-label { color: #b8800f; }
+.dash-grid > .card:nth-child(6) .mini-label { color: var(--teal); }
+
+/* ---- status banners: strong coloured edge ---- */
+.status-banner { border-left: 4px solid var(--blue); }
+.status-banner.ok    { border-left-color: var(--green); }
+.status-banner.stale { border-left-color: var(--amber); }
+.status-banner.error { border-left-color: var(--red); }
+
+/* ---- dashboard assistant card ---- */
+.assistant-card { border-top: 3px solid var(--teal); }
+.assistant-glow { background: var(--teal); }
+.assistant-card .mini-label { color: var(--teal); }
+.suggestion-list button:nth-child(1) svg { color: var(--blue); }
+.suggestion-list button:nth-child(2) svg { color: var(--red); }
+.suggestion-list button:nth-child(3) svg { color: #b8800f; }
+.suggestion-list button:nth-child(4) svg { color: var(--green); }
+
+/* ---- accepted file types: colour by format ---- */
+.format-list span:nth-child(1) { color: #c0392b; background: #fdecea; border-color: #f4c9c4; }
+.format-list span:nth-child(2) { color: #1f5a99; background: #e8f1fa; border-color: #c4daf0; }
+.format-list span:nth-child(3) { color: #5b6773; background: #eff2f4; border-color: #d9dfe4; }
+.format-list span:nth-child(4) { color: #2e8a5e; background: #e3f4eb; border-color: #bfe3cf; }
+.format-list span:nth-child(5) { color: #1f7a4f; background: #dcf1e5; border-color: #b4dcc6; }
+.format-list span:nth-child(6) { color: #b8800f; background: #fdf2d6; border-color: #f0dca3; }
+
+/* ---- pipeline progress chips ---- */
+.pipeline li.active { color: #1f5a99; border-color: #bcd5ee; background: #e8f1fa; }
+.pipeline li.done   { color: #1f7a4f; border-color: #b4dcc6; background: #e3f4eb; }

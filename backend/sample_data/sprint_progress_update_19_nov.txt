@@ -1,0 +1,33 @@
+SPRINT 4 PROGRESS UPDATE
+Date: 19 November 2026
+Sprint period: 9 November - 22 November 2026
+Prepared by: Ananya Rao
+
+SUMMARY
+Sprint 4 is behind plan. Milestone M2 (backend APIs) is due on 22 November, but two of its four items are not finished. The team is likely to miss the M2 deadline by about one week unless the SSO credentials are received immediately.
+
+COMPLETED THIS SPRINT
+- Event creation API and approval workflow endpoints are finished and reviewed.
+- Student event listing page is finished.
+- Database schema for events, registrations and venues is finalized.
+- Email confirmation for registrations works in the test environment.
+
+IN PROGRESS
+- Registrations API: 70 percent complete, owner Karthik Menon, due 22 November.
+- Authentication API: email login done, SSO login not started because credentials are still missing.
+- Registration form screens: started on 19 November by Sneha Iyer.
+
+NOT STARTED
+- Admin dashboard screens (waiting for designs from Rohit Verma, now expected 20 November).
+- Payment gateway integration (gateway decision still pending).
+- Automated test suite. Current test coverage is roughly 15 percent, against a team target of 70 percent.
+- Deployment to the college cloud server (server access not yet granted).
+
+SCHEDULE OBSERVATIONS
+- Sprint velocity was 18 story points planned versus 11 completed.
+- M3 starts on 23 November and depends on both the finished backend APIs and the admin designs. Any further delay in M2 pushes M3 directly.
+- The final demonstration on 18 December is fixed and cannot move.
+
+HELP NEEDED
+- Faculty mentor to help escalate the SSO credential request with the college IT department.
+- A decision on the payment gateway so integration work can begin.

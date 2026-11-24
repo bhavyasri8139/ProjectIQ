@@ -1,0 +1,36 @@
+PROJECT PROPOSAL: CAMPUS CONNECT (STUDENT EVENT MANAGEMENT APP)
+Prepared by: Team Orion, Department of Computer Science
+Project duration: 5 October 2026 to 18 December 2026
+
+1. OBJECTIVE
+Campus Connect is a web application that lets student clubs create events, lets students discover and register for them, and gives the college administration a single place to approve venues and track attendance. The objective is to replace the current mix of WhatsApp groups, paper forms and spreadsheets with one reliable system before the spring semester begins.
+
+2. GOALS
+- Reduce the time a club needs to publish an approved event from about 5 days to under 1 day.
+- Allow students to register for events and receive confirmation by email.
+- Give administrators a dashboard with venue bookings and attendance reports.
+- Integrate with the college single sign-on (SSO) so students log in with their existing accounts.
+
+3. DELIVERABLES
+- D1: Event creation and approval workflow for clubs and administrators.
+- D2: Student event discovery and registration portal with email confirmations.
+- D3: Administrator dashboard with venue booking calendar and attendance reports.
+- D4: College SSO login integration.
+- D5: Payment support for paid events using an online payment gateway.
+- D6: User guide, technical documentation and final demonstration.
+
+4. MILESTONES AND TIMELINE
+- M1 (5 Oct - 25 Oct 2026): Requirements, database design and UI wireframes completed.
+- M2 (26 Oct - 22 Nov 2026): Backend APIs for authentication, events and registrations completed.
+- M3 (23 Nov - 6 Dec 2026): Frontend portal, admin dashboard and payment integration completed.
+- M4 (7 Dec - 18 Dec 2026): End-to-end testing, documentation, deployment and final demonstration on 18 December 2026.
+
+5. TEAM AND RESPONSIBILITIES
+- Ananya Rao: Project lead and backend developer (authentication, events API).
+- Karthik Menon: Backend developer (registrations, email notifications, database).
+- Sneha Iyer: Frontend developer (student portal and admin dashboard).
+- Rohit Verma: UI/UX designer (wireframes and design system).
+- Dr. Meera Nair: Faculty mentor and approver of milestone sign-offs.
+
+6. TECHNOLOGY AND DEPENDENCIES
+The system uses a React frontend, a Python FastAPI backend and a PostgreSQL database hosted on the college cloud server. The project depends on the college IT department for SSO credentials and server access, and on a third-party payment gateway for paid events.

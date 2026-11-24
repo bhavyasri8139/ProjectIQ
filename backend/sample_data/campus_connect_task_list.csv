@@ -1,0 +1,17 @@
+Task ID,Task,Owner,Status,Due Date,Priority,Notes
+T-01,Design database schema,Karthik Menon,Completed,2026-10-20,High,Schema reviewed by mentor
+T-02,Create UI wireframes,Rohit Verma,Completed,2026-10-24,Medium,Approved
+T-03,Event creation API,Ananya Rao,Completed,2026-11-05,High,Merged to main
+T-04,Authentication API (email login),Ananya Rao,Completed,2026-11-10,High,No unit tests yet
+T-05,SSO login integration,Ananya Rao,Blocked,2026-11-22,High,Waiting for SSO credentials from college IT since 28 Oct
+T-06,Registrations API,Karthik Menon,In Progress,2026-11-22,High,70 percent complete
+T-07,Email confirmation service,Karthik Menon,Completed,2026-11-12,Medium,Working in test environment
+T-08,Student event listing page,Sneha Iyer,Completed,2026-11-15,Medium,
+T-09,Registration form screens,Sneha Iyer,In Progress,2026-11-27,Medium,Started 19 Nov
+T-10,Admin dashboard designs,Rohit Verma,Overdue,2026-11-14,High,Delayed due to exams; new date 20 Nov
+T-11,Admin dashboard screens,Sneha Iyer,Blocked,2026-12-04,High,Waiting for designs
+T-12,Payment gateway integration,,Not Started,2026-12-05,Medium,Gateway not decided; no owner
+T-13,Automated test suite (70 percent coverage),,Not Started,2026-12-10,High,Coverage currently about 15 percent; no owner
+T-14,Provision college cloud server,,Not Started,2026-12-01,High,Access not requested yet
+T-15,User guide and technical documentation,Rohit Verma,Not Started,2026-12-15,Low,
+T-16,Final demonstration preparation,Ananya Rao,Not Started,2026-12-18,High,Date is fixed

@@ -1,0 +1,36 @@
+# ---- Secrets: NEVER commit these (only .env.example is safe to commit) ----
+.env
+.env.*
+!.env.example
+*.env
+.env.txt
+backend/.env
+backend/.env.*
+!backend/.env.example
+frontend/.env
+frontend/.env.*
+*.pem
+*.key
+
+# ---- Runtime data created when the backend runs (may contain private documents) ----
+backend/uploads/
+backend/chroma_db/
+backend/documents.json
+backend/analysis_cache.json
+
+# ---- Python ----
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# ---- Node / build ----
+frontend/node_modules/
+frontend/dist/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
